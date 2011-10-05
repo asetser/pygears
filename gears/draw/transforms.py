@@ -15,8 +15,54 @@ on those objects, such as Translation, Rotation, and Scale.
 
 """
 from OpenGL import GL
+import math
 
+class SkewX(object):
+    """Decorator wrapping a node to skew it on the X-axis."""
+    def __init__(self, node, degree):
+        """Initializes a SkewX to skew node by degree.
 
+        :node: any object with a render() method
+        :degree: amount of x-axis skew
+
+        """
+        self._node = node
+        self._skew_mat = [1,0,0,0, math.tan(degree),1,0,0, 0,0,1,0, 0,0,0,1]
+    
+    def render(self):
+        """Renders the wrapped node skewed on the y-axis by the given degree."""
+        #Push Identity matrix
+        GL.glPushMatrix()
+        #Multiply by the x-axis skew transformation matrix
+        GL.glMultMatrixf(self._skew_mat)
+        #Preceed with rendering
+        self._node.render()
+        #remove transform matrix
+        GL.glPopMatrix()
+
+class SkewY(object):
+    """Decorator wrapping a node to skew it on the Y-axis."""
+    def __init__(self, node, degree):
+        """Initializes a SkewY to skew node by degree.
+
+        :node: any object with a render() method
+        :degree: amount of y-axis skew
+
+        """
+        self._node = node
+        self._skew_mat = [1,math.tan(degree),0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]
+    
+    def render(self):
+        """Renders the wrapped node skewed on the y-axis by the given degree."""
+        #Push Identity matrix
+        GL.glPushMatrix()
+        #Multiply by the x-axis skew transformation matrix
+        GL.glMultMatrixf(self._skew_mat)
+        #Preceed with rendering
+        self._node.render()
+        #remove transform matrix
+        GL.glPopMatrix()
+        
 class Translation(object):
     """Decorator wrapping a node to translate it across the screen."""
     def __init__(self, node, x, y):
