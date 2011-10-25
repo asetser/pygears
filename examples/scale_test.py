@@ -3,20 +3,15 @@ from gears import core
 from gears import draw
 from math import pi
 
-node = draw.primitives.Rect(300, 200, theta=1.5)
-
-def update(dt):
-    global node
-    node.x = (node.x + 50 * dt) % 1024
-    node.y = (node.y + 70 * dt) % 768
-
-
 def main():
-    global node
+    node = draw.primitives.Rect(100, 200)
+    # node = draw.primitives.Circle(500)
+    node = draw.transforms.Scaling(node, 1.5)
+    node = draw.transforms.Translation(node, 200, 200)
+    node2 = draw.primitives.Rect(100, 200)
     app = core.Application([])
-    clock = core.Clock(32)
-    clock.register(update)
     app.window.attach_node(node)
+    app.window.attach_node(node2)
     app.window.resize(1024, 768)
     app.run()
 
